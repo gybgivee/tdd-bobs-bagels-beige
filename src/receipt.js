@@ -1,50 +1,43 @@
-const Bagel = require("../src/bagel.js");
-const Basket = require("../src/basket.js");
 
+const Bagel = require("../src/myBagel.js");
 class Receipt {
-    constructor(obj = {}){
-    this.purchases = obj
-    this.date = new Date
-    this.total = 0
-    }
-    getReceipt(){
-        return `
-    ~~~ Bob's Bagels ~~~    
+    constructor() {
 
-       ${this.date.toDateString()}
-----------------------------
-${this.getPurchaseList()}
-Total                 £${Number(this.total.toFixed(2))}
-        Thank you
-      for your order!         `
     }
-    getPurchaseList(){
-        this.total = 0
-        let purchaseLines = ""
-        for (let key in this.purchases){
-            let receiptLine = ""
-            receiptLine += Bagel.getTypeOfBagel(key)
-            ? Bagel.getTypeOfBagel(key)
-            : 'Coffee'
-            for (let i = 0;i<19;i++){
-                if (receiptLine.length < 19){
-                    receiptLine += " "
-                }
-            }
-            receiptLine += this.purchases[`${key}`]
-            for (let i=0;i<4;i++){
-                if (receiptLine.length < 23){
-                    receiptLine += " "
-                }
-            }
-            receiptLine += "£"
-            const subtotal = Basket.getSubtotal(this.purchases, key)
-            receiptLine += subtotal
-            this.total += subtotal
-            purchaseLines += `${receiptLine}\n`
+    getReceipt(basket, checkout) {
+        const header = "~~~ Bob's Bagels ~~~\n";
+        let date = new Date;
+        date = date.toString() + "\n";
+        let listOfBasket = "";
+        let discountFrom = "";
+
+        const myBagel = new Bagel();
+
+        for (const item of basket) {
+
+            const details = myBagel.findBySKU(item.SKU);
+            //console.log(" details "+details.variant);
+            const eachStr = details.variant + ' ' + details.name + '             ' + details.price + '\n';
+            listOfBasket = listOfBasket + eachStr;
+            //console.log('listOfBasket '+listOfBasket);
         }
-        return purchaseLines
-    }
+      
+        listOfBasket+="\n---------------------\n";
+        listOfBasket += 'Total : ' + '             ' + checkout.total;
+        listOfBasket += '\n Thank You for your order \n';
+        let allStr=header+date+'\n'+listOfBasket;
+        if (checkout.deal.length > 0) {
+            //console.log('\n Total Discount:         ' + checkout.discount);
+            //console.log('You are saving today from');
+            allStr+='\n Total Discount:         ' + checkout.discount;
+            allStr+='You are saving today from';
+            const printDeal = checkout.deal;
+            //console.log('printDeal '+printDeal);
+            discountFrom = printDeal.reduce((total, element) => { return total + element }, "\n")
+            allStr+=discountFrom;
+        }
+        return allStr;
 
+    }
 }
-module.exports = Receipt
+module.exports = Receipt;

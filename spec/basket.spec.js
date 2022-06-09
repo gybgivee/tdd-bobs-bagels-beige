@@ -1,4 +1,4 @@
-const Bagel = require("../src/bagel.js");
+const Bagel = require("../src/myBagel.js");
 const Basket = require("../src/basket.js");
 
 describe("Basket", () => {
@@ -10,22 +10,24 @@ describe("Basket", () => {
 
     it("basket is empty", () => {
         const expected = []
-        const result = basket.contents
+        const result = basket.basket
         expect(result).toEqual(expected);
     });
 
     it("get price of bagel before adding to basket", () => {
-        const testBagel = new Bagel("BGLO");
-        const expected = testBagel.price;
-        const result = basket.getPriceOfBagel("BGLO");
+        const bagel = new Bagel()
+        const expected = "0.49"
+        const result = bagel.getPriceOfBagel("BGLO");
         expect(result).toEqual(expected);
       });
 
     it("add item to basket", () => {
 
-        const expected = [new Bagel("BGLO", 1)]
 
-        const result = basket.addBagel("BGLO")
+
+        const expected = [ { SKU: 'BGLP', quantity: 10, total: 3.9 } ]
+
+        const result = basket.addBagel("BGLP", 10)
 
         expect(result).toEqual(expected);
     });
@@ -33,41 +35,33 @@ describe("Basket", () => {
     it("remove item from basket", () => {
 
         const expected = []
-        basket.addBagel("BGLO")
-        const result = basket.removeBagel(1)
+        basket.addBagel("BGLP", 10)
+        const result = basket.removeBagel('BGLP')
 
         expect(result).toEqual(expected);
     });
 
     it("add a second bagel to basket", () => {
 
-        const expected = [new Bagel("BGLO", 1),
-        new Bagel("BGLO", 2)]
-        basket.addBagel("BGLO")
-        const result = basket.addBagel("BGLO")
+        const expected = [ { SKU: 'BGLP', quantity: 5, total: 1.95 }, 
+                            { SKU: 'COF', quantity: 1, total: 0.99 } ]
+
+        basket.addBagel("BGLP", 5)
+        const result = basket.addBagel("COF", 1)
         expect(result).toEqual(expected);
     });
 
     it("when Basket is full", () => {
 
-        const expected = 'basket is full'
-        basket.addBagel("BGLO", 4)
-        const result = basket.basketIsFull()
-        expect(result).toEqual(expected);
-    });
-    
-    it("prevent adding bagels past basket capacity", () => {
-        // shouldn't be able to add 4 bagels to basket of capacity 3.
-        const expected = 3
-        basket.addBagel("BGLO", 4)
-        const result = basket.contents.length
+        const expected = [ { SKU: 'BGLP', quantity: 10, total: 3.9 }]
+        basket.addBagel("BGLP", 10)
+        const result = basket.addBagel("COF", 1)
         expect(result).toEqual(expected);
     });
 
     it("create basket with larger capacity", () => {
-        const expected = true
-        const largeBasket = new Basket(5)
-        const result = largeBasket.capacity > basket.capacity
+        const expected = 20
+        const result = basket.changeLimit(20)
         expect(result).toEqual(expected);
     });
 
@@ -78,10 +72,10 @@ describe("Basket", () => {
     });
 
     it("total sum of bagels in my basket ", () => {
-        const expected = 3 * 0.49
-        basket.addBagel("BGLO", 3)
-        basket.countBagelsInBasket()
+        const expected = 2.75;
+        basket.addBagel("COF", 1)
+        basket.addBagel("BGLP", 5)  
         const result = basket.getTotal();
-        expect(result).toEqual(expected);
+        expect(result.total).toEqual(expected);
       });
 });
