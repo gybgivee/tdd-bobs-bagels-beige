@@ -3,7 +3,7 @@ const Deal = require("../src/deals.js");
 const Receipt = require("../src/receipt");
 
 class Basket {
-    constructor(basket = [], limit = 10) {
+    constructor(basket = [], limit = 20) {
         this.basket = basket;
         this.limit = limit
     }
@@ -81,17 +81,17 @@ class Basket {
 
 
 }
-const myBasket = new Basket();
-myBasket.addBagel('BGLP', 5)
-myBasket.addBagel('COF', 3)
-//console.log(myBasket.removeBagel('COF'));
-const total = myBasket.getTotal();
-//console.log('total ',total.total);
-const currentBasket = myBasket.getBasket();
-const newReceipt = new Receipt();
+// const myBasket = new Basket();
+// myBasket.addBagel('BGLP', 5)
+// myBasket.addBagel('COF', 3)
+// //console.log(myBasket.removeBagel('COF'));
+// const total = myBasket.getTotal();
+// //console.log('total ',total.total);
+// const currentBasket = myBasket.getBasket();
+// const newReceipt = new Receipt();
 
-const print = newReceipt.getReceipt(currentBasket,total);
-console.log(print);
+// const print = newReceipt.getReceipt(currentBasket,total);
+// console.log(print);
 
 
 // console.log(currentBasket);
@@ -101,7 +101,23 @@ console.log(print);
 // const newTotal = total - extraDiscount;
 // console.log('my deals : '+extraDiscount +' total '+total,'newTotal '+newTotal);
 
+const myBasket = new Basket();
+myBasket.changeLimit(50);
+myBasket.addBagel('BGLO', 4)
+myBasket.addBagel('BGLP', 15)
+myBasket.addBagel('BGLE', 7)
+myBasket.addBagel('COF', 3)
+//myBasket.addBagel('BGLP', 5)
+// myBasket.addBagel('COF', 3)
+// console.log(myBasket.removeBagel('COF'));
+const total = myBasket.getTotal();
+//console.log('total ',total.total);
+const currentBasket = myBasket.getBasket();
+const newReceipt = new Receipt();
 
+const print = newReceipt.getReceipt(currentBasket,total);
+
+console.log(print)
 
 
 module.exports = Basket

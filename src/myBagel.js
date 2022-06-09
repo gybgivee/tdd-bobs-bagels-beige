@@ -58,11 +58,13 @@ class Bagel {
             },
         ]
         const result = inventory.find(element => element.sku === productCode);
+        console.log("first console log", result)
         return result;
 
     }
     getPriceOfBagel(productCode) {
         const bagel = this.findBySKU(productCode)
+        console.log("second console log", bagel)
         return bagel.price;
     }
 

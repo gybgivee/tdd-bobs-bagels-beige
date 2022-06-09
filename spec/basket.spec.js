@@ -53,8 +53,8 @@ describe("Basket", () => {
 
     it("when Basket is full", () => {
 
-        const expected = [ { SKU: 'BGLP', quantity: 10, total: 3.9 }]
-        basket.addBagel("BGLP", 10)
+        const expected = [ { SKU: 'BGLP', quantity: 20, total: 7.8 }]
+        basket.addBagel("BGLP", 20)
         const result = basket.addBagel("COF", 1)
         expect(result).toEqual(expected);
     });

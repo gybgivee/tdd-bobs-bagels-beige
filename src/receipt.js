@@ -1,4 +1,3 @@
-
 const Bagel = require("../src/myBagel.js");
 class Receipt {
     constructor() {
@@ -7,17 +6,22 @@ class Receipt {
     getReceipt(basket, checkout) {
         const header = "~~~ Bob's Bagels ~~~\n";
         let date = new Date;
-        date = date.toString() + "\n";
+        date = date.getDate()+'/'+(date.getMonth()+1)+'/'+date.getFullYear() + "\n";
         let listOfBasket = "";
         let discountFrom = "";
+        let allStr = ""
 
         const myBagel = new Bagel();
+
+        if(basket.length > 0) {
+
+        
 
         for (const item of basket) {
 
             const details = myBagel.findBySKU(item.SKU);
             //console.log(" details "+details.variant);
-            const eachStr = details.variant + ' ' + details.name + '             ' + details.price + '\n';
+            const eachStr = details.variant + ' ' + details.name +' '+ item.quantity +' '+ details.price + '\n';
             listOfBasket = listOfBasket + eachStr;
             //console.log('listOfBasket '+listOfBasket);
         }
@@ -25,7 +29,7 @@ class Receipt {
         listOfBasket+="\n---------------------\n";
         listOfBasket += 'Total : ' + '             ' + checkout.total;
         listOfBasket += '\n Thank You for your order \n';
-        let allStr=header+date+'\n'+listOfBasket;
+        allStr=header+date+'\n'+listOfBasket;
         if (checkout.deal.length > 0) {
             //console.log('\n Total Discount:         ' + checkout.discount);
             //console.log('You are saving today from');
@@ -35,6 +39,7 @@ class Receipt {
             //console.log('printDeal '+printDeal);
             discountFrom = printDeal.reduce((total, element) => { return total + element }, "\n")
             allStr+=discountFrom;
+        }
         }
         return allStr;
 

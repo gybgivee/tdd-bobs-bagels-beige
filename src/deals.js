@@ -42,13 +42,14 @@ class Deal {
         //console.log('result ' + result.discount);
         return result;
     }
+    
     getDiscount(basket) {
 
         const currentBasket = basket;
         let extraDiscount = 0;
         let dealDiscount = 0;
         let currentQuantity = 0;
-        let pairPromo = [];
+        let pairPromo = 0;
         let discountFrom =[];
         //console.log('length: ' + currentBasket.length);
         for (let i = 0; i < currentBasket.length; i++) {
@@ -57,7 +58,7 @@ class Deal {
             //console.log('sku '+sku);
             const deal = this.getDeal(sku)
             currentQuantity = currentBasket[i].quantity;
-            //console.log('i '+i);
+            console.log('i '+i);
             //console.log('currentQuantity '+currentQuantity);
 
             //console.log('deal '+deal.pair);
@@ -65,29 +66,27 @@ class Deal {
 
                 extraDiscount = deal.discount + extraDiscount;
                 currentQuantity = currentQuantity - deal.promotion;
-                //console.log('extraDiscount ',extraDiscount);
+                console.log('extraDiscount ',extraDiscount);
                 discountFrom.push(deal.special)
+                console.log('currentQuantity '+currentQuantity);
             }
            
-            else if (deal.pair&&currentQuantity > 0) {
-             
-                    //console.log('dealDiscount '+dealDiscount);
-                    dealDiscount = (deal.pairPromotion * currentQuantity)+dealDiscount;
-                    //console.log('dealDiscount  after '+dealDiscount);
-                    pairPromo.push(dealDiscount);    
-                    discountFrom.push(deal.special)
+            if (deal.pair&&currentQuantity > 0) {
+                   pairPromo++;
+                  
             }
           
             //console.log('----------------');
         }
-        if (pairPromo.length > 0) {
-            const promoDiscount = pairPromo.reduce(function (sum, discount) {
-                return sum + discount;
-            }, 0);
+      console.log('dis ',extraDiscount);
+        if (pairPromo >= 2) {
+          
+           
             //console.log('promoDiscount '+promoDiscount);
-            const countDeal =  (Math.floor(promoDiscount / 0.13)/2);
-            extraDiscount = countDeal * 0.13;
-            
+            const countDeal =  (Math.floor(pairPromo / 2));
+            console.log('countDeal '+countDeal);
+            extraDiscount += countDeal * 0.13;
+            discountFrom.push( 'Coffee & Plain Bagel for 1.25');
             
         }
 
